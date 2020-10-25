@@ -1,3 +1,9 @@
+/*
+ * Edited By: Stewart Nash
+ * Date: October 2020
+ * Description: C++ implementation of depth-first search
+ * 	algorithm.
+ */
 #include "chapter_2.h"
 #include <iostream>
 #include <assert.h>
@@ -5,17 +11,17 @@
 const int NODE_COUNT = 10;
 const int STACK_MAXIMUM = 10;
 
-int adjacentNodes[NODE_COUNT][NODE_COUNT];
-int visitedNodes[NODE_COUNT];
+bool adjacentNodes[NODE_COUNT][NODE_COUNT];
+bool visitedNodes[NODE_COUNT];
 int stack[STACK_MAXIMUM];
 
 int stackIndex;
 
 void initializeMatrices() {
 	for (int i = 0; i < NODE_COUNT; i++) {
-		visitedNodes[i] = 0;
+		visitedNodes[i] = false;
 		for (int j = 0; j < NODE_COUNT; j++) {
-			adjacentNodes[i][j] = 0;
+			adjacentNodes[i][j] = false;
 		}
 	}
 }
@@ -24,7 +30,10 @@ void makeEdge(int startNode, int endNode) {
 	assert(startNode < NODE_COUNT && endNode < NODE_COUNT);
 	assert(startNode >= 0 && endNode >= 0);
 
-	adjacentNodes[startNode][endNode] = 1;
+	adjacentNodes[startNode][endNode] = true;
+	//std::cout << "Adjacency matrix (" << startNode << ", ";
+	//std::cout << endNode << ") = " << adjacentNodes[startNode][endNode];
+	//std::cout << std::endl;
 }
 
 void initializeStack() {
@@ -57,6 +66,7 @@ bool isEmpty() {
 
 void depthFirstSearch(int start, int goal) {
 	int node;
+
 	push(start);
 	while (!isEmpty()) {
 		// Open a new node.
@@ -69,15 +79,19 @@ void depthFirstSearch(int start, int goal) {
 
 
 		if (visitedNodes[node]) {
-			continue;
+			//continue;
 		} else {
-			visitedNodes[node] = 1;
-		}
-		std::cout << node;
-		// Push each of the children of the current node onto the stack.
-		for (int i = NODE_COUNT - 1; i <= 0; i--) {
-			if (adjacentNodes[node][i] == 1) {
-				push(i);
+			visitedNodes[node] = true;
+			std::cout << node << "\t";
+			// Push each of the children of the current node onto the stack.
+			for (int i = NODE_COUNT - 1; i >= 0; i--) {
+				//std::cout << "Read adjacent node (" << node << ", ";
+				//std::cout << i << ") = " << adjacentNodes[node][i];
+				//std::cout << std::endl;
+				if (adjacentNodes[node][i]) {
+					push(i);
+					//std::cout << "pushing " << i << std::endl;
+				}
 			}
 		}
 	}
